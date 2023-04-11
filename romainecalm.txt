@@ -1,0 +1,69 @@
+Romaine Calm
+
+Possible APIs
+https://perenual.com/docs/api
+https://docs.trefle.io/reference
+
+1. What goal will your website be designed to achieve? 
+Keeping your plants alive
+If you’re new to gardening, trying to keep track of what’s in your garden, or just trying to keep the plants you already have alive, this app is for you.
+
+Romaine Calm is an extensive plant database, giving the search capability to find a vast array of plants and allow for various methods to sort the information. It has a feature that enables you to save information on the plants that you have in your house or garden, into the ‘My Garden” list and have a favourites list for future plant inspiration. 
+
+The app has three elements:
+Search Plants
+Add plants to ‘My Garden’ (plants you already own) or to ‘Favourites’ (plants you like and might own in the future)
+Exportable My Garden list (are you going on holiday, or moving house, export a list of plants for future residents so that they know what’s in their garden and how to take care of it)
+
+2. What kind of users will visit your site? In other words, what is the demographic of your users? 
+The type of user that will visit Romaine calm is anyone who is interested in gardening, has a garden small or large, inside or outside. Anyone new to gardening who has trouble keeping track of what needs to be done to keep their plants healthy. Will be more useful for people who have gardens. 
+ 
+3. What data do you plan on using? You may have not picked your actual API yet, which is fine, just outline what kind of data you would like it to contain. 
+I will be using Plant API Documentation : 
+Free Plant API | Houseplants,Garden,Trees,Flowers,Images & Data
+ 
+4. In brief, outline your approach to creating your project (knowing that you may not know everything in advance and that these details might change later). Answer questions like the ones below, but feel free to add more information: 
+a. What does your database schema look like? 
+
+my_garden_DB
+Plant ID
+Common name
+Scientific name
+ImageURL
+Cycle (perennial, annual, biennial, biannual)
+Watering (frequent, average, minimum, none)
+Sunlight: full_shade, part_shade, sun-part_shade, full_sun
+Edible Yes/No 
+Poisonous Yes/No 
+Indoor Yes/No
+Favourite Yes/No
+
+b. What kinds of issues might you run into with your API? 
+Issues may include missing information, or the Api may be offline
+
+c. Is there any sensitive information you need to secure? 
+Will need to keep the token secure
+
+d. What functionality will your app include? 
+The home page will display two methods to search: by typing in the name of the plant or by selecting various plant characteristics from drop down menus. 
+Search by plant name: will redirect to a page showing information on searched for plant, an image, and care instructions. There will be the option to save the plant info to either My Garden (plants already in the garden), or favorites (for possible future inclusion in My Garden). If the user is not logged in when they try to save the plant information they’ll be redirected to the login/signup page.
+The search with drop down menus will allow the user to search plants by characteristics, for example, whether the plant is edible, needs frequent watering or partial sunlight. The user will select the amount of results they would like returned. The search results will each have a button to either save to My Garden or to Favourites. If the user is not logged in when they try to save the plant information they’ll be redirected to the login/signup page.
+
+
+e. What will the user flow look like? 
+The landing page will show information and an image of a randomly selected plant. 
+It will included a LOGIN /  SIGN UP options in the nav bar, if logged in this will be replaced with LOGOUT / MYGARDEN / FAVOURITES
+If the user attempts to save a plant to either list and they’re not signed in, the’ll be redirected to the login/sign up page 
+
+f. What features make your site more than CRUD? 
+Exportable list
+
+g.Stretch goals
+It will allow you to set reminders for watering, repotting, cutting back or fertilizing. The app will notify you when maintenance needs to be done to your plants via text message.
+
+
+
+
+
+
+
