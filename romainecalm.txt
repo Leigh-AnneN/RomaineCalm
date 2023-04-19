@@ -25,18 +25,29 @@ Free Plant API | Houseplants,Garden,Trees,Flowers,Images & Data
 4. In brief, outline your approach to creating your project (knowing that you may not know everything in advance and that these details might change later). Answer questions like the ones below, but feel free to add more information: 
 a. What does your database schema look like? 
 
-my_garden_DB
-Plant ID
-Common name
-Scientific name
-ImageURL
-Cycle (perennial, annual, biennial, biannual)
-Watering (frequent, average, minimum, none)
-Sunlight: full_shade, part_shade, sun-part_shade, full_sun
-Edible Yes/No 
-Poisonous Yes/No 
-Indoor Yes/No
-Favourite Yes/No
+plants:
+id[pk]
+name
+API ref
+
+garden_plants:
+id[pk]
+plants_id[fk]
+garden_id[fk]
+
+garden:
+id[pk]
+user_id[fk]
+garden_name
+Date created
+my_garden future_garden 
+
+users:
+id
+name 
+email 
+password
+
 
 b. What kinds of issues might you run into with your API? 
 Issues may include missing information, or the Api may be offline
@@ -45,9 +56,20 @@ c. Is there any sensitive information you need to secure?
 Will need to keep the token secure
 
 d. What functionality will your app include? 
-The home page will display two methods to search: by typing in the name of the plant or by selecting various plant characteristics from drop down menus. 
-Search by plant name: will redirect to a page showing information on searched for plant, an image, and care instructions. There will be the option to save the plant info to either My Garden (plants already in the garden), or favorites (for possible future inclusion in My Garden). If the user is not logged in when they try to save the plant information they’ll be redirected to the login/signup page.
-The search with drop down menus will allow the user to search plants by characteristics, for example, whether the plant is edible, needs frequent watering or partial sunlight. The user will select the amount of results they would like returned. The search results will each have a button to either save to My Garden or to Favourites. If the user is not logged in when they try to save the plant information they’ll be redirected to the login/signup page.
+
+1. The home page will display
+	-a randomly selected plant with and image
+	-2 search options:
+		1.search by plant name, plant name entered into form, data fetched from plant API.
+			-Will redirect to a page showing information on searched for plant, an image, and care instructions
+
+		2.drop down menus used to search my various plant characteristics, data fetched from Plant API
+			-The user will select the amount of results they would like returned. 
+
+
+2. There will be two places to save the plant info: My Garden and Future Garden. 
+
+3. If the user attempts to save a plant in either place, will be redirected into a login/signup page
 
 
 e. What will the user flow look like? 
