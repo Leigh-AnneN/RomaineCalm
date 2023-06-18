@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Create a New Garden</h1>
+
+<form action="{{ url_for('create_garden', plant_id=plant_id) }}" method="POST">
+    <label for="garden_name">Garden Name:</label>
+    <input type="text" name="garden_name" id="garden_name" required>
+    <input type="hidden" name="plant_id" value="{{ plant_id }}">
+    <p>plant id {{ plant_id }}</p>
+    <button type="submit">Create Garden</button>
+</form>
+
+{% endblock %}

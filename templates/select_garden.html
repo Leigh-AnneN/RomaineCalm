@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Gardens</h1>
+  <h3>Where would you like to save your plant?</h3>
+  
+  <form action="{{ url_for('select_garden', plant_id=plant_id) }}" method="POST">
+    <!-- <input type="hidden" name="name" value="{{ plant.plant_name_api }}">
+    <input type="hidden" name="api_id" value="{{ plant.api_id }}"> -->
+    <input type="hidden" name="plant_id" value="{{ plant_id }}">
+    <label for="garden_type">Select Garden Type:</label>
+    <select name="garden_type" id="garden_type">
+      <option value="My Garden">My Garden</option>
+      <option value="My Future Garden">My Future Garden</option>
+    </select>
+    <button type="submit">Save Plant</button>
+  </form>
+
+  <a href="{{ url_for('create_garden', plant_id=plant_id)}}">Create a new Garden</a>
+{% endblock %}

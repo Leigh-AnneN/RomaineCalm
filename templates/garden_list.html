@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Gardens</h1>
+  {% if gardens %}
+  <ul>
+    {% for garden in gardens %}
+      <li>{{ garden.garden_name }}</li>
+      <ul>
+        {% for plant in garden.plants %}
+          <li>{{ plant.plant_name_api }}</li>
+
+          
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>No gardens yet.</p>
+  {% endif %}
+{% endblock %}

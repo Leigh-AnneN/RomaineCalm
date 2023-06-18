@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Plant Information</h1>
+
+<img src="{{ plant['image_url'] }}" alt="Plant Image" class="img-thumbnail">
+<h4>{{ plant['common_name'] }}</h4>
+<!-- Display more plant information here -->
+<ul>
+  <li>Family Common Name: {{ plant['family_common_name'] }}</li>
+  <li>Is this plant edible? {{plant['edible']}}</li> 
+  <li>Growth: {{plant['growth']['description']}}</li>
+  <li>Light Rating: {{plant['growth']['light']}}</li>
+  
+</ul>
+  
+<form action="/save" method="POST">
+    <input type="hidden" name="name" value="{{ plant['common_name'] }}">
+    <input type="hidden" name="api_id" value="{{ plant['id'] }}">
+    <button type="submit">Save Plant</button>
+  </form>
+
+
+{% endblock %}

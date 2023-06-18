@@ -84,8 +84,27 @@ g.Stretch goals
 It will allow you to set reminders for watering, repotting, cutting back or fertilizing. The app will notify you when maintenance needs to be done to your plants via text message.
 
 
+Search:
+https://perenual.com/api/species-list?key=[YOUR-API-KEY]&q=monstera
+
+https://perenual.com/api/species-list?key=sk-0pPZ640dec34d6010168&q=monstera
 
 
 
+https://perenual.com/api/species-list?page=1&key=sk-0pPZ640dec34d6010168
 
+
+soWcxThsgT9OIygmJQb8_D83ep2Yk6IUZZMTljKYH2I
+https://trefle.io/api/v1/plants?token=YOUR_TREFLE_TOKEN
+
+http://trefle.io/api/v1/plants/search?token=soWcxThsgT9OIygmJQb8_D83ep2Yk6IUZZMTljKYH2I&q=cocos
+
+238331
+
+http://trefle.io/api/v1/plants/token=soWcxThsgT9OIygmJQb8_D83ep2Yk6IUZZMTljKYH2I&id=238331
+
+http://trefle.io/api/v1/plants/238331
+
+
+https://trefle.io/api/v1/plants?token=YOUR_TREFLE_TOKEN&filter[common_name]=beach%20strawberry
 
