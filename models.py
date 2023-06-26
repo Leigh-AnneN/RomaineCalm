@@ -21,8 +21,7 @@ class Garden(db.Model):
 
     garden_name = db.Column(
         db.Text,
-        nullable=False,
-        unique=True,
+        nullable=False
     )
 
     date_of_creation = db.Column(

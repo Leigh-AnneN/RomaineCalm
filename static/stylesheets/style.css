@@ -25,8 +25,7 @@ h1 {
   font-weight: bold;
   margin-bottom: 1rem;
   color: #e6ecf0;
-  /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
-
+ 
 }
 /* ======================= Nav */
 
@@ -125,8 +124,6 @@ nav form.navbar-form {
   color: #66757f;
 }
 
-
-
 #search.form-control + .btn:active,
 #search.form-control + .btn:focus {
   box-shadow: none;
@@ -138,54 +135,6 @@ nav form.navbar-form {
   border: 2px solid #007bff;
 }
 
-/* on "onboarding" pages (signup & login), the navbar is
-   different: no search box, the logo is centered, and it has
-   a background color.
- */
-
-.onboarding > .navbar {
-  background-image: url("/static/images/nav-bg.png");
-  background-size: 100% 100%;
-}
-
-.onboarding .navbar-header {
-  margin: 0 auto;
-}
-
-.onboarding .navbar-brand {
-  margin: 0;
-}
-
-.onboarding .navbar-brand span {
-  display: none;
-}
-
-.onboarding .nav.navbar-nav.navbar-right {
-  position: absolute;
-  right: 16px;
-}
-
-.onboarding > .navbar a {
-  color: #fff;
-}
-
-.onboarding > .navbar form.navbar-form {
-  display: none;
-}
-
-.onboarding {
-  background-color: #fff;
-}
-
-@media (max-width: 468px) {
-  nav form.navbar-form {
-    display: none;
-  }
-}
-
-nav + .container {
-  margin-bottom: 1rem;
-}
 
 /* ===================== User profile */
 
@@ -285,12 +234,6 @@ nav + .container {
   word-wrap: break-word;
 }
 
-@media (max-width: 768px) {
-  .full-width .user-stats .stat {
-    display: none;
-  }
-}
-
 
 
 
@@ -382,56 +325,6 @@ nav + .container {
   padding: 12px;
 }
 
-/* =========================== Edit Page */
-
-.edit-btn-area {
-  display: flex;
-  justify-content: space-between;
-}
-
-.edit-btn-area > .btn {
-  width: 48%;
-}
-
-/* =========================== Message Show page */
-
-.bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #62676c;
-}
-
-#messages.no-hover .message-area {
-  width: 100%;
-}
-
-#messages.no-hover .message-heading {
-  display: flex;
-  justify-content: space-between;
-  height: 47px;
-  margin-top: 3px;
-}
-
-#messages.no-hover .message-heading .btn {
-  min-width: 105px;
-}
-
-#messages-form {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  z-index: 1;
-}
-
-.single-message {
-  font-size: 27px;
-  line-height: 32px;
-  letter-spacing: 0.01em;
-  margin-bottom: 10px;
-}
 
 /* ================================ 404 page */
 

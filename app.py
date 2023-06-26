@@ -102,7 +102,7 @@ def signup():
         seed_gardens(user.id)
         do_login(user)
         
-        return redirect("/search")
+        return redirect("/plants")
 
     else:
         return render_template('users/signup.html', form=form)
