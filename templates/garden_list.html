@@ -1,21 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Gardens</h1>
-  {% if gardens %}
-  <ul>
-    {% for garden in gardens %}
-      <li>{{ garden.garden_name }}</li>
-      <ul>
-        {% for plant in garden.plants %}
-          <li>{{ plant.plant_name_api }}</li>
+<div class="container">
+  <div class="home-hero"></div>
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto">
+          <h1>Gardens</h1>   
+      </div>
+      </div> 
+  </div>  
 
-          
-        {% endfor %}
-      </ul>
-    {% endfor %}
-  </ul>
+  {% if gardens %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Garden ID</th>
+        <th>Garden Name</th>
+        <th>Date Created</th>
+        <th>Plants</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for garden in gardens %}
+        <tr>
+          <td>{{ garden.id }}</td>
+          <td>{{ garden.garden_name }}</td>
+          <td>{{ garden.date_of_creation }}</td>
+          <td>
+            <ul>
+              {% for plant in garden.plants %}
+                <li>{{ plant.plant_name_api }}</li>          
+              {% endfor %}
+            </ul>
+          </td>
+          <td>
+            <button onclick="deleteGarden({{ garden.id }})" class="btn btn-danger btn-sm">Delete</button>
+            <button class="btn btn-primary btn-sm" onclick="window.location.href='/gardens/{{ garden.id }}/edit'">Edit</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% else %}
     <p>No gardens yet.</p>
   {% endif %}
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 {% endblock %}

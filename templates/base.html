@@ -15,6 +15,7 @@
         href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
   <link rel="stylesheet" href="/static/stylesheets/style.css">
   <link rel="shortcut icon" href="/static/planticon.png">
+  
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -38,8 +39,8 @@
       <li>
         <a href="/users/{{ g.user.id }}"></a>
       </li>
-      <li><a href="/search">SEARCH</a></li>
-      <li><a href="{{ url_for('list_gardens', user_id=g.user.id) }}">GARDENS</a></li>
+      <li><a href="/plants">SEARCH</a></li>
+      <li><a href="/gardens">GARDENS</a></li>
       <li><a href="/logout">LOG OUT</a></li>
       {% endif %}
     </ul>
@@ -54,5 +55,6 @@
   {% endblock %}
 
 </div>
+
 </body>
 </html>

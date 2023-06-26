@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Plant Information</h1>
+<div class="plant-grid">
+  <img src="{{ plant['image_url'] }}" alt="Plant Image" class="img-thumbnail">
+  {% if plant.get('images') and plant['images'].get('flower') %}
+      <img src="{{ plant['images']['flower'][0]['image_url'] }}" alt="Flower Image" class="img-thumbnail">
+    {% endif %}
+    {% if plant.get('images') and plant['images'].get('bark') %}
+    <img src="{{ plant['images']['bark'][0]['image_url'] }}" alt="Bark Image" class="img-thumbnail">
+  {% endif %}
+  {% if plant.get('images') and plant['images'].get('fruit') %}
+    <img src="{{ plant['images']['fruit'][0]['image_url'] }}" alt="Fruit Image" class="img-thumbnail">
+  {% endif %}
+</div>
+
+<h4>{{ plant['common_name'] }}</h4>
+  <h5>Common Names:</h5>
+  <ul>
+    {% for name in plant['common_names']['en'] %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ul>
+
+<!-- Display more plant information here -->
+<ul>
+  <li>Family Common Name: {{ plant['family_common_name'] }}</li>
+  <li>Growth: {{ plant['growth']['description'] }}</li>
+  <li>Light Rating: {{ plant['growth']['light'] }}</li>
+  <li>Is this plant edible? {{ plant['edible'] }}</li>
+  {% if plant['edible_part'] %}
+    <li>Edible Part: {{ plant['edible_part'] }}</li>
+  {% endif %}
+</ul>
+
+<form action="/save" method="POST">
+    <input type="hidden" name="name" value="{{ plant['common_name'] }}">
+    <input type="hidden" name="api_id" value="{{ plant['id'] }}">
+    <button type="submit">Save Plant</button>
+  </form>
+
+
+{% endblock %}

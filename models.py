@@ -37,7 +37,9 @@ class Garden(db.Model):
     )
 
     plants = db.relationship('Plant', secondary='garden_plants', backref='gardens')
-    garden_contains=db.relationship('Garden_Plant', backref='gardens')
+    garden_contains = db.relationship('Garden_Plant', cascade='all, delete', backref='gardens')
+
+    
 
 
 class Plant(db.Model):

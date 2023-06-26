@@ -1,0 +1,52 @@
+<!-- edit_garden.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="home-hero"></div>
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto">
+          <h1>Edit Garden</h1>   
+      </div>
+      </div> 
+  </div>
+
+  <div class="row">
+    <div class="col">
+        <form method="POST" action="{{ url_for('edit_garden', garden_id=garden.id) }}">
+            <div class="form-group mb-4"> 
+              <label for="garden_name">Garden Name</label>
+              <input type="text" id="garden_name" name="garden_name" value="{{ garden.garden_name }}" required>
+              <button type="submit" class="btn btn-success btn-block btn-sm">Update Garden Name</button>
+            </div>
+        </form>
+    </div>
+  </div>
+  
+  <table class="table">
+    <thead>
+        <tr>
+            <th>Plant Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for plant in garden.plants %}
+            <tr>
+                <td>{{ plant.plant_name_api }}</td>
+                <td>
+                    <button onclick="deletePlant({{ garden.id }}, {{ plant.id }})" class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}
+
+
+
+
+
+

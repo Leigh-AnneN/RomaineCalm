@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from secrets import API_SECRET_KEY
 
-from forms import UserAddForm, LoginForm, SearchPlantForm
+from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Garden, Garden_Plant, Plant
 
 CURR_USER_KEY = "curr_user"
@@ -20,7 +20,7 @@ app.app_context().push()
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///romainecalm'))
+os.environ.get('DATABASE_URL', 'postgresql:///romainecalm'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -30,7 +30,7 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 
 ##############################################################################
-# User signup/login/logout
+# User Routes
 
 
 @app.before_request
@@ -38,7 +38,8 @@ def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
 
     if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
+        user_id = session[CURR_USER_KEY]
+        g.user = User.query.get(user_id)
 
     else:
         g.user = None
@@ -69,8 +70,6 @@ def seed_gardens(user_id):
         db.session.add(garden)
     
     db.session.commit()
-
-
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -122,7 +121,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect("/search")
+            return redirect("/plants")
 
         flash("Invalid credentials.", 'danger')
 
@@ -135,38 +134,42 @@ def logout():
 
     do_logout()
     flash("You have successfully logged out.", "success")
-    return redirect("login.html")
+    return redirect("/")
 
 
 ##############################################################################
 #Plant routes 
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
+@app.route('/plants', methods=['GET'])
+def search_plants():
     """Show search form and display search results"""
-    if request.method == 'POST':
-        search_query = request.form.get("search_query")
-        res = requests.get(f"{API_BASE_URL}/plants/search",
-                           params={'token':API_SECRET_KEY, 'q': search_query})
-        plantdata = res.json()
-        plants=plantdata["data"]
-
-        return render_template('search_form.html', plants=plants)
-    
-    return render_template('search_form.html')    
-
-
+    if request.method == 'GET':
+        search_query = request.args.get("search_query")
+        if search_query:
+            res = requests.get(f"{API_BASE_URL}/plants/search",
+                               params={'q':search_query, 'token':API_SECRET_KEY})
+            if res.status_code == 200:
+                plantdata = res.json()
+                plants=plantdata["data"]
+                return render_template('plants/search_form.html', plants=plants)
+            else:
+                return "Failed to find plants"
+        else:
+            return render_template('plants/search_form.html')
+        
+  
 @app.route("/plants/<int:plant_id>", methods=['GET'])
 def plant_info(plant_id):
     """fetches specific information about a plant from the Trefle API"""
-    res = requests.get(f"{API_BASE_URL}/species/{plant_id}",
+    if request.method == 'GET':
+        res = requests.get(f"{API_BASE_URL}/species/{plant_id}",
                            params={'token':API_SECRET_KEY})
-    if res.status_code == 200:
-        plant_info = res.json()
-        plant=plant_info["data"]
-        return render_template('plant_info.html',plant=plant)
-    else:
-        return "Failed to find plant information"
+        if res.status_code == 200:
+            plant_info = res.json()
+            plant=plant_info["data"]
+            return render_template('plants/plant_info.html',plant=plant)
+        else:
+            return "Failed to find plant information"
     
 @app.route('/save', methods=['POST'])
 def save_plant():
@@ -178,7 +181,7 @@ def save_plant():
     existing_plant = Plant.query.filter_by(api_id=api_id).first()
     if existing_plant:
         flash(f"This plant already exist in the database", "danger")
-        return redirect(url_for('/search'))
+        return redirect(url_for('search'))
 
     new_plant = Plant(plant_name_api=name, api_id=api_id)
 
@@ -194,21 +197,24 @@ def save_plant():
 def select_garden(plant_id=None):
     """Select a garden where to save the plant"""   
     plant = Plant.query.get(plant_id)
+    user = User.query.get(g.user.id)
+    gardens = user.gardens
         
     if request.method== 'POST':
-        garden_type = request.form.get('garden_type')
-        print("****************selecting a garden", garden_type)
-        garden = get_garden(garden_type)
+        garden_id = request.form.get('garden_id')
+        garden = Garden.query.get(garden_id)
         
         if plant and garden:
             #create relationship between plant and garden
             garden.plants.append(plant)
             db.session.commit()
            
-        flash(f"Plant saved to { garden_type}!", "success")
-        return render_template('select_garden.html', plant_id=plant_id, plant=plant)
+        flash(f"Plant saved to { garden.garden_name}!", "success")
+        # return redirect(url_for('select_garden'))
+        return redirect(url_for('list_gardens', user_id=g.user.id))
+        # return render_template('select_garden.html', plant_id=plant_id, plant=plant)
 #Handle GET request
-    return render_template('select_garden.html', plant_id=plant_id, plant=plant)
+    return render_template('select_garden.html', plant_id=plant_id, plant=plant,gardens=gardens)
 
 def get_garden(garden_type):
     """Get an existing garden by type """
@@ -231,9 +237,6 @@ def create_garden():
         garden_name = request.form.get('garden_name')
         plant_id = request.args.get('plant_id')  # Retrieve plant_id from query string
     
-        print("############Form Data:", request.form)
-        print("############Query String - plant_id:", plant_id)
-    
         if not plant_id:
             flash("Plant_id required", "danger")
             return redirect(url_for('create_garden'))
@@ -250,6 +253,7 @@ def create_garden():
         garden = create_new_garden(garden_name, user_id)
 
         if garden:
+            flash(f"New garden {garden.garden_name} created! The new garden can be found in the Garden Type drop down menu", "success")
             return redirect(url_for('select_garden', plant_id=plant_id))
             
     return render_template('create_garden.html')
@@ -270,19 +274,71 @@ def create_new_garden(garden_name, user_id):
         db.session.commit()
         return garden
    
-@app.route('/gardens/<int:user_id>', methods=['GET'])
-def list_gardens(user_id):
-    """List all the users gardens and associated plants for a user """
-    user =User.query.get(user_id)
-    if user:
-        gardens = user.gardens
-        plants = Plant.query.all()
-        return render_template('garden_list.html', user=user, gardens=gardens, plants=plants) 
+@app.route('/gardens', methods=['GET'])
+def list_gardens():
+    """List all the users gardens and associated plants for a user with options to edit or delete"""
+    
+    user_id = session.get(CURR_USER_KEY)
+    user = User.query.get(user_id)
+
+    if user_id:
+        user =User.query.get(g.user.id)
+        if user:
+            gardens = user.gardens
+            plants = Plant.query.all()
+            app_js_path = url_for('static', filename='app.js')
+            return render_template('garden_list.html', user=user, gardens=gardens, plants=plants, app_js_path=app_js_path) 
+        else:
+            flash("User not found", "danger")
+            return redirect(url_for('homepage'))
     else:
-        flash("User not found", "danger")
+        flash("User not authenticated", "danger")
         return redirect(url_for('homepage'))
 
-   
+@app.route('/gardens/<int:garden_id>', methods=['DELETE'])
+def delete_garden(garden_id):
+    """Delete a garden and associated plants"""
+    garden = Garden.query.get_or_404(garden_id)
+    if garden:
+        for garden_plant in garden.garden_contains:
+            db.session.delete(garden_plant)
+
+        db.session.delete(garden)
+        db.session.commit()
+        flash(f"{garden.garden_name} successfully deleted", "success")
+        return '', 204 #successful deletion
+ 
+
+@app.route('/gardens/<int:garden_id>/edit', methods=['GET', 'POST'])
+def edit_garden(garden_id):
+    """Edit a garden and  """
+    garden = Garden.query.get_or_404(garden_id)
+    if garden:
+        if request.method == 'POST':
+            garden_name = request.form.get('garden_name')
+            garden.garden_name = garden_name
+            db.session.commit()
+            flash(f"{garden.garden_name} successfully updated", "success")
+            return redirect(url_for('list_gardens'))
+        else:
+            return render_template('edit_garden.html', garden=garden)
+    else:
+        flash("Garden not found", "danger")
+        return redirect(url_for('list_gardens'))
+    
+@app.route('/gardens/<int:garden_id>/plants/<int:plant_id>', methods=['DELETE'])
+def delete_plant_from_garden(garden_id, plant_id):
+    """Delete plant from garden on edit_garden template"""
+    garden = Garden.query.get_or_404(garden_id)
+    plant = Plant.query.get_or_404(plant_id)
+    if garden and plant:
+        garden_plant = Garden_Plant.query.filter_by(garden_id=garden_id, plant_id=plant_id).first()
+        db.session.delete(garden_plant)
+        db.session.commit()
+        flash(f"{plant.plant_name_api} successfully deleted from {garden.garden_name}", "success")
+        return '', 204 #successful deletion
+ 
+    
 #################################################
 
 @app.route('/')

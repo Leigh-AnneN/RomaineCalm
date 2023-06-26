@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<div class="home-hero"></div>
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+        <h1>Search Plants</h1>
+        <form action="/plants" method="GET" class="search-form">
+          <input type="text" name="search_query" placeholder="Enter plant name">
+          <button class="btn btn-success btn-block btn-sm" type="submit">Search</button>
+        </form>
+    </div>
+    </div> 
+</div>
+</div>
+        {% if plants %}
+        <h2>Search Results</h2>
+        
+        <div class="plant-grid">
+          {% for plant in plants %}
+          <div class="plant-card">
+            <img src="{{ plant['image_url'] }}" alt="Plant Image">
+            <h4>{{ plant['common_name'] }}</h4>
+          <a href="/plants/{{ plant['id'] }}" class="btn btn-success btn-block btn-sm">More Info</a>
+          </div>
+          {% endfor %} 
+        </div>
+        {% endif %}
+  
+{% endblock %}
+
+
+
+
