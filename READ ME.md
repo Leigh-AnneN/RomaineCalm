@@ -30,7 +30,7 @@ e. **API Integration**
 
 f. **Technology Stack**
    - Front-end: HTML, CSS, JavaScript
-   - Back-end: Python, Flask 
+   - Back-end: Python 7.0.1, Flask-SQLAlchemy 2.3.2 
    - Database: PostgreSQL
    - API Integration: RESTful API
 
